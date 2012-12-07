@@ -15,7 +15,7 @@
       // load the properties from model into the control
       this.properties().ListTitle = this.get("ListTitle");
       this.properties().ListType = this.get("ListType");
-      
+
       var listItems = [];
       this.get("ListItems").each(function (listItem) {
         listItems.push(listItem.get("text"))
@@ -30,10 +30,12 @@
       this.set("ListType", this.properties().ListType);
 
       var listItems = JSON.parse(this.properties().ListItems);
-      for (var i = 0; i < listItems.length; i++) {
-        this.get("ListItems").add(new ListItem({
-          "text" : listItems[i]
-        }));
+      if (listItems) {
+        for (var i = 0; i < listItems.length; i++) {
+          this.get("ListItems").add(new ListItem({
+            "text": listItems[i]
+          }));
+        }
       }
 
     },
@@ -47,15 +49,15 @@
     }
   });
 
-  var ListItem = Backbone.Model.extend({ });
-  var ListItems = Backbone.Collection.extend({ });
+  var ListItem = Backbone.Model.extend({});
+  var ListItems = Backbone.Collection.extend({});
 
   var DesignerView = Backbone.View.extend({
 
     el: ".mvc-designer",
 
     initialize: function () {
-      
+
       //this.model.set("ListItems", new ListItems(this.model.get("ListItems")));
       this.model.get("ListItems").bind("add", this.listItemAdded, this);
 
@@ -99,7 +101,7 @@
 
     listItemAdded: function (listItem) {
       var listItemView = new ListItemView({ model: listItem });
-      $(this.el).find("#sortable-list").append(listItemView.render().el);      
+      $(this.el).find("#sortable-list").append(listItemView.render().el);
     }
 
   });
